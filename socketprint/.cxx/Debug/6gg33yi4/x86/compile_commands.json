@@ -1,0 +1,7 @@
+[
+{
+  "directory": "D:/workspace/github/SocketPrint/socketprint/.cxx/Debug/6gg33yi4/x86",
+  "command": "D:\\ProgramFiles\\SDK\\ndk\\23.1.7779620\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang++.exe --target=i686-none-linux-android28 --sysroot=D:/ProgramFiles/SDK/ndk/23.1.7779620/toolchains/llvm/prebuilt/windows-x86_64/sysroot -DProject_EXPORTS -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -fexceptions -frtti -stdlib=libc++ -g  -fno-limit-debug-info -fPIC -o compile\\CMakeFiles\\Project.dir\\multicompile.cpp.o -c D:\\workspace\\github\\SocketPrint\\socketprint\\src\\main\\cpp\\compile\\multicompile.cpp",
+  "file": "D:\\workspace\\github\\SocketPrint\\socketprint\\src\\main\\cpp\\compile\\multicompile.cpp"
+}
+]

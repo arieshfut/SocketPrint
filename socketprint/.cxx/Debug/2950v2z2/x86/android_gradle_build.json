@@ -1,0 +1,40 @@
+{
+  "buildFiles": [
+    "D:\\workspace\\github\\SocketPrint\\socketprint\\src\\main\\cpp\\CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "D:\\ProgramFiles\\SDK\\cmake\\3.22.1\\bin\\ninja.exe",
+      "-C",
+      "D:\\workspace\\github\\SocketPrint\\socketprint\\.cxx\\Debug\\2950v2z2\\x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "D:\\ProgramFiles\\SDK\\cmake\\3.22.1\\bin\\ninja.exe",
+    "-C",
+    "D:\\workspace\\github\\SocketPrint\\socketprint\\.cxx\\Debug\\2950v2z2\\x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "socket_print::@6890427a1f51a3e7e1df": {
+      "toolchain": "toolchain",
+      "abi": "x86",
+      "artifactName": "socket_print",
+      "output": "D:\\workspace\\github\\SocketPrint\\socketprint\\build\\intermediates\\cxx\\Debug\\2950v2z2\\obj\\x86\\libsocket_print.so",
+      "runtimeFiles": [
+        "D:\\ProgramFiles\\SDK\\ndk\\23.1.7779620\\toolchains\\llvm\\prebuilt\\windows-x86_64\\sysroot\\usr\\lib\\i686-linux-android\\28\\liblog.so"
+      ]
+    }
+  },
+  "toolchains": {
+    "toolchain": {
+      "cCompilerExecutable": "D:\\ProgramFiles\\SDK\\ndk\\23.1.7779620\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe",
+      "cppCompilerExecutable": "D:\\ProgramFiles\\SDK\\ndk\\23.1.7779620\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang++.exe"
+    }
+  },
+  "cFileExtensions": [],
+  "cppFileExtensions": [
+    "cpp"
+  ]
+}

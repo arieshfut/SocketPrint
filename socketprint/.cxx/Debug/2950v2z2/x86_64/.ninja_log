@@ -1,0 +1,4 @@
+# ninja log v5
+1	313	7345083475642145	CMakeFiles/socket_print.dir/src/socket_manager.cpp.o	a626b711af6bf4f6
+3	355	7345083476050562	CMakeFiles/socket_print.dir/socket_jni.cpp.o	ab6d7cd4142c84d9
+355	412	7345083476670438	D:/workspace/github/SocketPrint/socketprint/build/intermediates/cxx/Debug/2950v2z2/obj/x86_64/libsocket_print.so	a758225d74802c5a

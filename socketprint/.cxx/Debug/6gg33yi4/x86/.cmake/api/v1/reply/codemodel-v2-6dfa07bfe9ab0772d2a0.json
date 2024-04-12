@@ -1,0 +1,87 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.18.1"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "compile",
+					"jsonFile" : "directory-compile-Debug-2b252bee2f2b3fdd5c2b.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.18.1"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "compile",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Project"
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "multicompile",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 1,
+					"id" : "Project::@dac688a65f9e4b333979",
+					"jsonFile" : "target-Project-Debug-c129043cd83d3ea03752.json",
+					"name" : "Project",
+					"projectIndex" : 1
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "D:/workspace/github/SocketPrint/socketprint/.cxx/Debug/6gg33yi4/x86",
+		"source" : "D:/workspace/github/SocketPrint/socketprint/src/main/cpp"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

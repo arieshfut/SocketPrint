@@ -1,0 +1,82 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 33
+
+
+    defaultConfig {
+        applicationId "com.aries.print"
+        minSdkVersion 28
+        targetSdkVersion 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+
+        externalNativeBuild {
+            cmake {
+                arguments "-DANDROID_STL=c++_shared"
+                cppFlags "-std=c++14"
+                cppFlags "-DMAXME_ANDROID"
+                abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            debuggable true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            def date = new Date().format("yyyyMMdd" , TimeZone.getTimeZone("GMT+08"))
+            android.applicationVariants.all {
+                variant ->
+                    variant.outputs.all {
+                        outputFileName = "${rootProject.name}_${variant.name}_v${variant.versionName}_${date}.apk"
+                    }
+            }
+        }
+
+        debug {
+            debuggable true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            def date = new Date().format("yyyyMMdd" , TimeZone.getTimeZone("GMT+08"))
+            android.applicationVariants.all {
+                variant ->
+                    variant.outputs.all {
+                        outputFileName = "${rootProject.name}_${variant.name}_v${variant.versionName}_${date}.apk"
+                    }
+            }
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path 'src/main/cpp/CMakeLists.txt'
+            version '3.22.1'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildFeatures {
+        viewBinding true
+        prefab true
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    // implementation 'org.jnetpcap:jnetpcap:1.4.1'
+    implementation 'org.snmp4j:snmp4j:3.6.4'
+}

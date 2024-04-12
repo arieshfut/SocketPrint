@@ -1,0 +1,3 @@
+D:/workspace/github/SocketPrint/socketprint/.cxx/Debug/2950v2z2/armeabi-v7a/CMakeFiles/socket_print.dir
+D:/workspace/github/SocketPrint/socketprint/.cxx/Debug/2950v2z2/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/workspace/github/SocketPrint/socketprint/.cxx/Debug/2950v2z2/armeabi-v7a/CMakeFiles/rebuild_cache.dir
