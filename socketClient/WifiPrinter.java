@@ -7,9 +7,14 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 
 public class WifiPrinter {
     private final static String TAG = "WifiPrinter";
+    private final int connectTimeout = 5000;
+    private final int readTimeout = 20000;
 
     private final char ESC = (char)27;
     private final char CR = (char)13;
@@ -53,9 +58,12 @@ public class WifiPrinter {
 	public void connect() {
 		try {
 			mSocket = new Socket(mIp, mPort);
-			System.out.println(TAG + " " + mIp + ":"+ mPort + " connected...");
+			mSocket.setSoTimeout(readTimeout);
+
 			mInputStream = mSocket.getInputStream();
 			mOutputStream = mSocket.getOutputStream();
+            String hostName = InetAddress.getByName(mIp).getHostName();
+			System.out.println(TAG + " " + mIp + ":"+ mPort + " HostName:" + hostName + " connected...");
 			mReader = new BufferedReader(new InputStreamReader(mInputStream));
 		} catch (UnknownHostException e) {
 			System.out.println(TAG + " UnknownHostException" + e);
