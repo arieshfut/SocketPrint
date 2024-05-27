@@ -1,3 +1,0 @@
-D:/workspace/github/SocketPrint/socketprint/.cxx/Debug/2950v2z2/x86_64/CMakeFiles/socket_print.dir
-D:/workspace/github/SocketPrint/socketprint/.cxx/Debug/2950v2z2/x86_64/CMakeFiles/edit_cache.dir
-D:/workspace/github/SocketPrint/socketprint/.cxx/Debug/2950v2z2/x86_64/CMakeFiles/rebuild_cache.dir

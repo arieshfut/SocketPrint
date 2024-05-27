@@ -123,7 +123,7 @@ public class WifiPrinter {
 	}
 
 	public String printerInfo() {
-		String cmd = "@PJL INFO ID\r\n";
+		String cmd = "@PJL INFO USTATUS\r\n";
 		// String cmd = "@PJL ECHO HELLO\r\n";
 		// String cmd = "@PJL INFO ID\r\n";
 		// String cmd = "@PJL INFO CONFIG\r\n";

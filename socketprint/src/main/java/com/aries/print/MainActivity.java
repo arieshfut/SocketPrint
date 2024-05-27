@@ -3,7 +3,6 @@ package com.aries.print;
 import android.Manifest;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.graphics.pdf.PdfDocument;
 import android.os.Build;
@@ -15,14 +14,13 @@ import android.print.PrintManager;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-// import androidx.print.PrintHelper;
-
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.aries.print.util.ActivityHelper;
 import com.aries.print.util.IPv6SocketClient;
+import com.aries.print.util.SmbjManager;
 import com.aries.print.util.WifiPrinter;
 import com.aries.print.util.SNMPManager;
 
@@ -30,10 +28,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * @author aries
@@ -114,20 +115,15 @@ public class MainActivity extends AppCompatActivity {
             new Thread(new SNMPManager()).start();
         } else if (view.getId() == R.id.btn_ipv6_print) {
             boolean supportIPv6 = IPv6SocketClient.supportIpv6();
-
             Toast.makeText(MainActivity.getContext(), "Current device" + (supportIPv6 ? "" : " not") + " support IPv6", Toast.LENGTH_SHORT).show();
-
             if (supportIPv6) {
                 IPv6SocketClient.CrazyThreadPool.THREAD_POOL_EXECUTOR.execute(new Runnable() {
                     @Override
                     public void run() {
                         try {
                             String ipv6Address = "fe80::a00:37ff:fed4:f176";
-                            String ipv4Address = "172.18.2.51";
                             String message = "@PJL INFO ID\r\n";
-                            int port = 9100;
-
-                            IPv6SocketClient client = new IPv6SocketClient(ipv6Address, port);
+                            IPv6SocketClient client = new IPv6SocketClient(ipv6Address, 9100);
 
                             if (client.isConnected()) {
                                 client.sendMessage(message);
@@ -142,6 +138,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }
+        } else if (view.getId() == R.id.btn_ipp_print) {
+            printIppInfo();
+        } else if (view.getId() == R.id.btn_smb_print) {
+            new Thread(SmbjManager.getInstance()).start();;
         }
     }
 
@@ -204,6 +204,29 @@ public class MainActivity extends AppCompatActivity {
         printManager.print(jobName, myPrintAdapter, attributes);
     }
 
+    private void printIppInfo() {
+        OkHttpClient client = new OkHttpClient(); // 创建OkHttpClient实例
+        Request request = new Request.Builder()
+                .url("http://192.168.10.130:631") // 设置请求的URL
+                .build(); // 创建Request对象
+
+        Log.i(TAG, "printIppInfo start");
+        try (Response response = client.newCall(request).execute()) { // 执行请求并获取Response
+            if (response.isSuccessful()) { // 检查请求是否成功
+                // 请求成功，处理响应体，例如转换为字符串
+                String responseBody = response.body().string();
+                Log.i(TAG, "printIppInfo:" + responseBody);
+            } else {
+                // 请求失败，处理错误情况
+                Log.e(TAG, "printIppInfo Unexpected error:" + response);
+            }
+        } catch (Exception e) {
+            // 处理异常，例如网络错误等
+            e.printStackTrace();
+        }
+        Log.i(TAG, "printIppInfo end");
+    }
+
     /**
      * android是可以通过wifi调用打印机打印图片或者文档的，在API19之前，调用打印机是通过Socket通信然后打印东西的，Socket是比较原始的通信模式，
      * 也是相对比较底层的，一般通过端口连接是可以连接任意两台机器进行数据传输并操作的
@@ -214,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
      * @param path
      */
     /*private void printPhoto(String path) {
-        PrintHelper photoPrinter = new PrintHelper(this);
+        PrintHelperPrintHelper photoPrinter = new PrintHelper(this);
         //设置填充的类型，填充的类型指的是在A4纸上打印时的填充类型，两种模式
         photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
         Bitmap bitmap = BitmapFactory.decodeFile(path);

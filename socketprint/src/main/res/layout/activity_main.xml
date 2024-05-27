@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,41 +11,55 @@
         android:id="@+id/btn_open_hp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="打开HP"
+        android:text="@string/btn_str_open_hp"
         android:onClick="openPrint"/>
 
     <Button
         android:id="@+id/btn_open_print_hand"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="打开PrintHand"
+        android:text="@string/btn_str_open_printhand"
         android:onClick="openPrint"/>
 
     <Button
         android:id="@+id/btn_wifi_print"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="WIFI打印"
+        android:text="@string/btn_str_wifi_print"
         android:onClick="openPrint"/>
 
     <Button
         android:id="@+id/btn_pdf_print"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="PDF打印"
+        android:text="@string/btn_str_pdf_print"
         android:onClick="openPrint"/>
 
     <Button
         android:id="@+id/btn_snmp_state"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="打印机SNMP状态"
+        android:text="@string/btn_str_snmp_state"
         android:onClick="openPrint"/>
 
     <Button
         android:id="@+id/btn_ipv6_print"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="IPv6打印"
+        android:text="@string/btn_str_ipv6_print"
+        android:onClick="openPrint"/>
+
+    <Button
+        android:id="@+id/btn_ipp_print"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_str_ipp_print"
+        android:onClick="openPrint"/>
+
+    <Button
+        android:id="@+id/btn_smb_print"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_str_smb_print"
         android:onClick="openPrint"/>
 </LinearLayout>

@@ -1,2 +1,0 @@
-D:\workspace\github\SocketPrint\socketprint\src\main\cpp\CMakeLists.txt
-D:\workspace\github\SocketPrint\socketprint\src\main\cpp\compile\CMakeLists.txt

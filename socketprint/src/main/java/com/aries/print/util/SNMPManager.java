@@ -1,26 +1,18 @@
 package com.aries.print.util;
 
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+import android.util.Log;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.snmp4j.*;
 import org.snmp4j.event.*;
 import org.snmp4j.mp.SnmpConstants;
 import org.snmp4j.smi.*;
-import org.snmp4j.transport.*;
-
+import org.snmp4j.transport.DefaultUdpTransportMapping;
 
 public class SNMPManager implements Runnable {
+    private final static String TAG = "SNMPManager";
 
     private Snmp snmp;
     private ArrayList<String> addressList;
@@ -30,8 +22,7 @@ public class SNMPManager implements Runnable {
     /**
      * Constructor
      */
-    public SNMPManager()
-    {
+    public SNMPManager() {
         addressList = new ArrayList<>();
         printers = new ArrayList<>();
         snmp = null;
@@ -42,30 +33,23 @@ public class SNMPManager implements Runnable {
     }
 
     private void begin() {
-        /**
-         * Port 161 is used for Read and Other operations
-         * Port 162 is used for the trap generation
-         */
-        System.out.println("Gaethring IP Addresses...");
-        parsePrintServer();
+        /* Port 161 is used for Read and Other operations
+         * Port 162 is used for the trap generation */
+        Log.i(TAG, "Gaethring IP Addresses...");
         inputAddresses();
-        System.out.println(printers.size()+" printers found.");
+        Log.i(TAG, printers.size()+" printers found.");
         start();
-        System.out.println("Sending SNMP Messages");
+        Log.i(TAG, "Sending SNMP Messages Done");
         String progressBar = "|                                   |";
-        System.out.print(progressBar+"\r");
         for(int i = 0;i < printers.size();i++) {
             getAsString(printers.get(i));
             progressBar = progressBar.substring(0, i+1) +'=' + progressBar.substring(i+2);
-            System.out.print(progressBar+"\r");
         }
-        System.out.println("\nDone");
         try {
             snmp.close();
         } catch (IOException e) {
             // Error
-            System.out.println("Error trying to close() snmp");
-            System.exit(1);
+            Log.i(TAG, "Error trying to close() snmp");
         }
         //Sorts ascending order by black ink levels
         //"%-30s %-16s %-30s %-20s %2d%% %2d%% %2d%% %2d%% %2d%% %2d%%
@@ -74,57 +58,35 @@ public class SNMPManager implements Runnable {
                 .thenComparing(Printer::iskprinter)
                 .thenComparing(Printer::isNotColour)
                 .thenComparingInt(Printer::getBlack));
-        System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
-        System.out.println(String.format("%-30s %-16s %-30s %-22s %3s","Location","IP","Model","Serial","B    Y    M    C      K1     K2"));
-        System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+        Log.i(TAG, "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+        Log.i(TAG, String.format("%-30s %-16s %-30s %-22s %3s","Location","IP","Model","Serial","B    Y    M    C      K1     K2"));
+        Log.i(TAG, "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
         //Make a print string instead?
         //print
         for(int i = 0; i < printers.size(); i ++) {
-            System.out.println(printers.get(i).toString());
+            Log.i(TAG, printers.get(i).toString());
         }
-        System.exit(0);
+        // System.exit(0);
     }
 
-    private void parsePrintServer() {
-        //Retrieves ip address line by line from txt file printserver.txt
-        try(InputStream in = SNMPManager.class.getResourceAsStream("printserver.txt");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-16"))){
-
-            BufferedWriter bw1 = new BufferedWriter(new FileWriter(new File("printers.txt"), false));
-
-            String line;
-            while((line = reader.readLine()) != null) {
-                Pattern p = Pattern.compile("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}");
-                Matcher m = p.matcher(line);
-                while(m.find()) {
-                    bw1.write(m.group(0));
-                    bw1.newLine();
-                }
-            }
-            bw1.close();
-
-        } catch (IOException | NullPointerException e) {
-            //error
-            System.out.println("Can't find printserver.txt");
-            System.exit(1);
-        }
-    }
     private void inputAddresses(){
         //input addresses from text file
-        try(InputStream in = SNMPManager.class.getResourceAsStream("printers.txt");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in))){
-            String line;
-            while((line = reader.readLine()) != null) {
-                //while line exists, add to list
-                Printer newPrinter = new Printer(line);
-                addressList.add(line);
-                printers.add(newPrinter);
-            }
-            reader.close();
-        } catch (IOException | NullPointerException e) {
-            //error
-            System.out.println("Can't find printers.txt");
-            System.exit(1);
+        String[] ipList = {
+                "172.18.2.51",
+                "192.168.10.130",
+                "172.18.67.247",
+                "172.18.1.10",
+                "172.18.3.92",
+                "172.18.4.108",
+                "172.18.4.241",
+                "172.18.33.156",
+                "172.18.4.168"
+        };
+
+        for (String ipStr : ipList) {
+            Printer newPrinter = new Printer(ipStr);
+            addressList.add(ipStr);
+            printers.add(newPrinter);
         }
     }
 
@@ -132,7 +94,6 @@ public class SNMPManager implements Runnable {
      * Start the Snmp session. If you forget the listen() method you will not
      * get any answers because the communication is asynchronous
      * and the listen() method listens for answers.
-     * @throws IOException
      */
     private void start() {
         TransportMapping<?> transport;
@@ -142,19 +103,16 @@ public class SNMPManager implements Runnable {
             snmp.listen();
         } catch (IOException e) {
             // Error
-            System.out.println("Error trying to listen()");
-            System.exit(1);
+            Log.e(TAG, "Error trying to listen()");
+            // System.exit(1);
         }
     }
 
     /**
      * Method which takes a single OID and returns the response from the agent as a String.
      * @param obj printer
-     * @return
-     * @throws IOException
      */
-    private void getAsString(Printer obj){
-
+    private void getAsString(Printer obj) {
         //These care custom IP settings for the printers on my network
         ResponseEvent<?> event;
         event = getV2C(new OID[] {new OID(".1.3.6.1.2.1.1.5.0"),new OID(".1.3.6.1.2.1.43.11.1.1.9.1.1"),new OID(".1.3.6.1.2.1.43.11.1.1.8.1.1"),
@@ -162,48 +120,35 @@ public class SNMPManager implements Runnable {
                 new OID(".1.3.6.1.2.1.43.11.1.1.9.1.4"),new OID(".1.3.6.1.2.1.43.11.1.1.8.1.4"),new OID(".1.3.6.1.2.1.43.11.1.1.9.1.30"),new OID(".1.3.6.1.2.1.43.11.1.1.8.1.30"),
                 new OID(".1.3.6.1.2.1.43.11.1.1.9.1.31"),new OID(".1.3.6.1.2.1.43.11.1.1.8.1.31"),new OID(".1.3.6.1.2.1.1.6.0"),new OID(".1.3.6.1.2.1.43.5.1.1.17.1"), new OID(".1.3.6.1.2.1.43.12.1.1.4.1.2")}, obj);
         // 0 name, 1 black curr, 2 black max, 3 yellow curr, 4 yellow max, 5 magenta curr, 6 magenta max, 7 cyan curr, 8 cyan max, 9 k1 curr, 10 k1 max, 11 k2 curr , 12 k2 max, 13 location, 14 serial, 15 "yellow"
-
-        if(event.getResponse() != null) {
-            obj.setName(event.getResponse().get(0).getVariable().toString());
-            if(!event.getResponse().get(1).getVariable().isException() && !event.getResponse().get(2).getVariable().isException()){
-                obj.setBlack(Math.round(Float.parseFloat(event.getResponse().get(1).getVariable().toString())/Float.parseFloat(event.getResponse().get(2).getVariable().toString())*100));
+        PDU response = event.getResponse();
+        if(response != null) {
+            obj.setName(response.get(0).getVariable().toString());
+            if(!response.get(1).getVariable().isException() && !response.get(2).getVariable().isException()){
+                obj.setBlack(Math.round(Float.parseFloat(response.get(1).getVariable().toString())/Float.parseFloat(response.get(2).getVariable().toString())*100));
             }
 
-            if(event.getResponse().get(15).getVariable().toString().equals("yellow")) {
+            if(response.get(15).getVariable().toString().equals("yellow")) {
                 //if colour printer
                 obj.setColour();
-                obj.setYellow(Math.round(Float.parseFloat(event.getResponse().get(3).getVariable().toString())/Float.parseFloat(event.getResponse().get(4).getVariable().toString())*100));
-                obj.setMagenta(Math.round(Float.parseFloat(event.getResponse().get(5).getVariable().toString())/Float.parseFloat(event.getResponse().get(6).getVariable().toString())*100));
-                obj.setCyan(Math.round(Float.parseFloat(event.getResponse().get(7).getVariable().toString())/Float.parseFloat(event.getResponse().get(8).getVariable().toString())*100));
+                obj.setYellow(Math.round(Float.parseFloat(response.get(3).getVariable().toString())/Float.parseFloat(response.get(4).getVariable().toString())*100));
+                obj.setMagenta(Math.round(Float.parseFloat(response.get(5).getVariable().toString())/Float.parseFloat(response.get(6).getVariable().toString())*100));
+                obj.setCyan(Math.round(Float.parseFloat(response.get(7).getVariable().toString())/Float.parseFloat(response.get(8).getVariable().toString())*100));
             }
 
-            if(!event.getResponse().get(9).getVariable().isException() && !event.getResponse().get(10).getVariable().isException()){
-                float tonerK1 = Float.parseFloat(event.getResponse().get(9).getVariable().toString())/Float.parseFloat(event.getResponse().get(10).getVariable().toString());
+            if(!response.get(9).getVariable().isException() && !response.get(10).getVariable().isException()){
+                float tonerK1 = Float.parseFloat(response.get(9).getVariable().toString())/Float.parseFloat(response.get(10).getVariable().toString());
                 obj.setK1(Math.round(tonerK1*100));
                 obj.setkprinter();
             }
 
-            if(!event.getResponse().get(11).getVariable().isException() && !event.getResponse().get(12).getVariable().isException()){
-                float tonerK2 = Float.parseFloat(event.getResponse().get(11).getVariable().toString())/Float.parseFloat(event.getResponse().get(12).getVariable().toString());
+            if(!response.get(11).getVariable().isException() && !response.get(12).getVariable().isException()){
+                float tonerK2 = Float.parseFloat(response.get(11).getVariable().toString())/Float.parseFloat(response.get(12).getVariable().toString());
                 obj.setK2(Math.round(tonerK2*100));
             }
 
-            if(("10.214.192.215").equals(obj.getIP()) || ("10.214.192.250").equals(obj.getIP())) {
-                //manually set label printers
-                obj.setLabelPrinter();
-            }
-            else
-            {
-                String serial = event.getResponse().get(14).getVariable().toString();
-                obj.setSerial(serial.substring(serial.length() - 6));
-            }
-
-            if(("10.214.192.95").equals(obj.getIP())) {
-                obj.setLocation("Careers Office Colour (FR0037)");
-            }
-            else {
-                obj.setLocation(event.getResponse().get(13).getVariable().toString());
-            }
+            String serial = response.get(14).getVariable().toString();
+            obj.setSerial(serial.substring(serial.length() - 6));
+            obj.setLocation(response.get(13).getVariable().toString());
         } else {
             //can't contact printer
             obj.setOffline();
@@ -213,8 +158,6 @@ public class SNMPManager implements Runnable {
     /**
      * This method is capable of handling multiple OIDs
      * @param oids
-     * @return
-     * @throws IOException
      */
     private ResponseEvent<?> getV2C(OID oids[], Printer obj){
         PDU pdu = new PDU();
@@ -234,7 +177,6 @@ public class SNMPManager implements Runnable {
     /**
      * This method returns a Target, which contains information about
      * where the data should be fetched and how.
-     * @return
      */
     private CommunityTarget<Address> getTarget(Printer obj, int ver) {
         Address targetAddress = GenericAddress.parse("udp:"+obj.getIP()+"/161");

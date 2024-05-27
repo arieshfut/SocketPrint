@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">SocketPrint</string>
+    <string name="btn_str_open_hp">打开HP</string>
+    <string name="btn_str_open_printhand">打开PrintHand</string>
+    <string name="btn_str_wifi_print">WIFI打印</string>
+    <string name="btn_str_pdf_print">PDF打印</string>
+    <string name="btn_str_snmp_state">打印机SNMP状态</string>
+    <string name="btn_str_ipv6_print">IPv6打印</string>
+    <string name="btn_str_ipp_print">IPP打印协议</string>
+    <string name="btn_str_smb_print">SMB打印协议</string>
+    <string name="btn_str_mopria_info">Mopria信息</string>
+    <string name="text_str_mopria">Mopria打印</string>
 </resources>
